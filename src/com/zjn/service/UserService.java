@@ -2,7 +2,7 @@ package com.zjn.service;
 
 import com.zjn.domain.User;
 
-public interface UserService {
+public interface UserService extends Service{
     /**
      * 注册用户
      * @param user 封装了用户数据的userbean

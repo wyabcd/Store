@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 import com.zjn.domain.User;
 
-public interface UserDao {
+public interface UserDao extends Dao{
 
 	/**
 	 * 根据用户名查找用户
@@ -12,15 +12,14 @@ public interface UserDao {
 	 * @param conn
 	 * @return 查找到的用户,如果找不到返回null
 	 */
-	User findUserByName(String username, Connection conn);
+	User findUserByName(String username);
 
 	/**
 	 * 添加用户
 	 * @param user 封装了用户信息的bean
-	 * @param conn
 	 */
 
-	void addUser(User user, Connection conn);
+	void addUser(User user);
 
 	/**
 	 * 根据激活码查找用户
@@ -50,5 +49,11 @@ public interface UserDao {
 	 */
 	User finUserByNameAndPsw(String username, String password);
 
+	/**
+	 * 根据id查找用户
+	 * @param user_id
+	 * @return
+	 */
+	User findUserById(int user_id);
 
 }

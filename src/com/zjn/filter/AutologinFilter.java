@@ -14,7 +14,6 @@ import java.net.URLDecoder;
 public class AutologinFilter implements Filter {
 
     public void destroy() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -40,7 +39,7 @@ public class AutologinFilter implements Filter {
                 String v = URLDecoder.decode(findC.getValue(),"utf-8");
                 String username = v.split(":")[0];
                 String password = v.split(":")[1];
-                UserService service = BasicFactory.getFactory().getInstance(UserService.class);
+                UserService service = BasicFactory.getFactory().getService(UserService.class);
                 User user = service.getUserByNameAndPsw(username, password);
                 if(user!=null){
                     req.getSession().setAttribute("user", user);
@@ -54,7 +53,7 @@ public class AutologinFilter implements Filter {
     }
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        // TODO Auto-generated method stub
+
 
     }
 

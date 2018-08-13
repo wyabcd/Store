@@ -3,20 +3,19 @@ package com.zjn.service;
 import com.zjn.dao.UserDao;
 import com.zjn.domain.User;
 import com.zjn.factory.BasicFactory;
-import com.zjn.util.DaoUtils;
-import org.apache.commons.dbutils.DbUtils;
+
 
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.sql.Connection;
+
 import java.util.Properties;
 import java.util.UUID;
 
 public class UserServiceImpl implements UserService{
-    private UserDao dao = BasicFactory.getFactory().getInstance(UserDao.class);
+    private UserDao dao = BasicFactory.getFactory().getDao(UserDao.class);
     /**
      * 注册用户
      *
@@ -24,19 +23,16 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     public void regist(User user) {
-        Connection conn=null;
         try {
-            conn = DaoUtils.getConn();
-            conn.setAutoCommit(false);
             //1.检验用户名是否已经存在
-            if (dao.findUserByName(user.getUsername(), conn) != null) {
+            if (dao.findUserByName(user.getUsername()) != null) {
                 throw new RuntimeException("用户名已经存在");
             }
             //2.调用dao中的方法添加用户到数据库
             user.setRole("user");
             user.setState(0);
             user.setActivecode(UUID.randomUUID().toString());
-            dao.addUser(user,conn);
+            dao.addUser(user);
 
             //3.发送激活邮件
                 Properties prop = new Properties();
@@ -57,9 +53,8 @@ public class UserServiceImpl implements UserService{
                 trans.connect("aa", "123");
                 trans.sendMessage(msg, msg.getAllRecipients());
 
-                DbUtils.commitAndCloseQuietly(conn);
+
         }catch (Exception e){
-            DbUtils.rollbackAndCloseQuietly(conn);
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -102,4 +97,5 @@ public class UserServiceImpl implements UserService{
     public User getUserByNameAndPsw(String username, String password) {
         return dao.finUserByNameAndPsw(username,password);
     }
+
 }

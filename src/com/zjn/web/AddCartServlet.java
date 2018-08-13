@@ -1,10 +1,38 @@
-@javax.servlet.annotation.WebServlet(name = "AddCartServlet")
-public class AddCartServlet extends javax.servlet.http.HttpServlet {
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
+package com.zjn.web;
 
+import com.zjn.domain.Product;
+import com.zjn.factory.BasicFactory;
+import com.zjn.service.ProdService;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Map;
+
+@WebServlet(name = "AddCartServlet")
+public class AddCartServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request,response);
     }
 
-    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ProdService service=BasicFactory.getFactory().getService(ProdService.class);
+        //1.根据id查找出要购买的商品
+        String id=request.getParameter("id");
+        Product prod=service.findProdById(id);
+        //2.向cartmap中添加这个商品，如果之前没有这个商品，则添加并将数量设置为1
+        //如果已经有过这个商品，数量+1
+        if(prod==null){
+            throw new RuntimeException("找不到该商品");
+        }else{
+            Map<Product,Integer> cartmap=(Map<Product,Integer>)request.getSession().getAttribute("cartmap");
+            cartmap.put(prod,cartmap.containsKey(prod)?cartmap.get(prod)+1:1);
 
+        }
+        //3.重定向到购物车页面进行展示
+        response.sendRedirect("/cart.jsp");
     }
 }

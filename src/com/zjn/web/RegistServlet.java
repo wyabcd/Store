@@ -20,7 +20,7 @@ public class RegistServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserService service = BasicFactory.getFactory().getInstance(UserService.class);
+        UserService service = BasicFactory.getFactory().getService(UserService.class);
         try{
             //1.校验验证码
             String valistr1 = request.getParameter("valistr");

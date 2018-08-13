@@ -19,7 +19,11 @@
       </c:if>
       <c:if test="${sessionScope.user!=null}">
         欢迎回来，${sessionScope.user.username }
-        <a href="/LogoutServlet">注销</a>
+          <a href="/addProd.jsp">添加商品</a>
+          <a href="/ProdListServlet">商品列表</a>
+          <a href="/cart.jsp">查看购物车</a>
+          <a href="/OrderListServlet">订单查询</a>
+          <a href="/LogoutServlet">注销</a>
       </c:if>
   </body>
 </html>

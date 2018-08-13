@@ -1,2 +1,6 @@
 UserDao = com.zjn.dao.UserDaoImpl
 UserService = com.zjn.service.UserServiceImpl
+ProdDao = com.zjn.dao.ProdDaoImpl
+ProdService = com.zjn.service.ProdServiceImpl
+OrderService=com.zjn.service.OrderServiceImpl
+OrderDao=com.zjn.dao.OrderDaoImpl
