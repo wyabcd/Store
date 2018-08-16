@@ -23,6 +23,7 @@
           <a href="/ProdListServlet">商品列表</a>
           <a href="/cart.jsp">查看购物车</a>
           <a href="/OrderListServlet">订单查询</a>
+          <a href="/SaleListServlet">销售榜单下载</a>
           <a href="/LogoutServlet">注销</a>
       </c:if>
   </body>

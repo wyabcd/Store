@@ -76,4 +76,15 @@ public class ProdDaoImpl implements ProdDao {
             throw new SQLException("库存不足");
         }
     }
+
+    @Override
+    public void addProd(String product_id) {
+        try {
+            String sql="update products set pnum=pnum+? where id=?";
+            QueryRunner runner=new QueryRunner(TransactionManager.getSource());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 }

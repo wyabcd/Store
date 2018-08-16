@@ -22,4 +22,10 @@ public interface ProdDao extends Dao{
      * 扣除商品库存数量
      */
     void delPnum(String product_id,int buynum) throws SQLException;
+    /**
+     * 加回产品库存数量
+     * @param product_id
+     * @param buynum
+     */
+    void addPnum(String product_id, int buynum);
 }

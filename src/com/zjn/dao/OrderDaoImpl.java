@@ -2,8 +2,10 @@ package com.zjn.dao;
 
 import com.zjn.domain.Order;
 import com.zjn.domain.OrderItem;
+import com.zjn.domain.SaleInfo;
 import com.zjn.util.TransactionManager;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import java.sql.SQLException;
@@ -65,6 +67,83 @@ public class OrderDaoImpl implements OrderDao {
             QueryRunner runner = new QueryRunner(TransactionManager.getSource());
             return runner.query(sql, new BeanListHandler<OrderItem>(OrderItem.class), order_id);
         } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 删除指定id订单所关联的所有订单项
+     *
+     * @param order_id 订单id
+     */
+    @Override
+    public void delOrderItem(String order_id) {
+        String sql="delete from orderitem where order_id=?";
+        try {
+            QueryRunner runner=new QueryRunner(TransactionManager.getSource());
+            runner.update(sql,order_id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 删除指定id的订单
+     *
+     * @param id
+     */
+    @Override
+    public void delOrder(String id) {
+        String sql="delete from orders where id=?";
+        try {
+            QueryRunner runner=new QueryRunner(TransactionManager.getSource());
+            runner.update(sql,id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 根据id查询订单
+     *
+     * @param order_id
+     * @return
+     */
+    @Override
+    public Order findOrderById(String order_id) {
+         String sql="select * from orders where id=?";
+        try {
+            QueryRunner runner=new QueryRunner(TransactionManager.getSource());
+            return runner.query(sql,new BeanHandler<Order>(Order.class),order_id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 查询销售榜单
+     *
+     * @return
+     */
+    @Override
+    public List<SaleInfo> saleList() {
+        String sql=
+                "select products.id prod_id,products.name,prod_name,sum(orderitem.buynum),sale_num"+
+                        "from orders,orderitem,products"+
+                        "where"+
+                        "orders.id=orderitem.order_id"+
+                        "and"+
+                        "orderitem.product_id=products.id"+
+                        "group by products.id"+
+                        "order by sale_num desc";
+        try {
+            QueryRunner runner=new QueryRunner(TransactionManager.getSource());
+            return runner.query(sql,new BeanListHandler<SaleInfo>(SaleInfo.class));
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }

@@ -77,4 +77,39 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException();
         }
     }
+
+    /**
+     * 根据订单编号删除订单
+     *
+     * @param id
+     */
+    @Override
+    public void delOrderByID(String id) {
+        //1.根据id查询出所有订单项
+        List<OrderItem> list=orderDao.findOrderItems(id);
+        //2.遍历订单项，将对应prod_id的商品的库存加回去
+        for(OrderItem item :list){
+            prodDao.addPnum(item.getProduct_id(),item.getBuynum());
+        }
+        //3.删除订单项
+        orderDao.delOrderItem(id);
+    }
+
+    /**
+     * 根据id查询订单
+     *
+     * @param order_id
+     */
+    @Override
+    public Order findOrderById(String order_id) {
+        return orderDao.findOrderById(order_id);
+    }
+
+    /**
+     * 查询销售榜单
+     */
+    @Override
+    public List<SaleInfo> saleList() {
+        return orderDao.saleList();
+    }
 }
